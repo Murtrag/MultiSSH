@@ -1,0 +1,74 @@
+!groups / !gs
+ - home_cluster
+ - work_cluster
+ - project_cluster
+
+ !group home_cluster / !g home_cluster
+  - 192.168.1.10  (1)
+  - 192.168.1.12  (2)
+
+  !activate gs home_cluster / !a gs home_cluster
+
+  (home_cluster) >
+
+  !a gs home_cluster:1
+  !a 1
+  (home_cluster:1) >
+
+
+!exit / !e
+- exit
+
+!? / ?
+- help
+
+
+
+
+
+
+
+#!/bin/bash
+
+# Ustalanie zdalnych hostów i użytkowników
+REMOTE_HOST1="user1@server1.com"
+REMOTE_HOST2="user2@server2.com"
+
+# Uruchamianie sesji SSH na obu serwerach i przekierowanie strumieni
+exec 3<>/dev/tcp/server1.com/22
+exec 4<>/dev/tcp/server2.com/22
+
+# Nawiązanie sesji SSH z zdalnymi serwerami
+ssh "$REMOTE_HOST1" -tt > >(while read -r; do echo "[server1] $REPLY"; done) <&3 &
+SSH_PID1=$!
+
+ssh "$REMOTE_HOST2" -tt > >(while read -r; do echo "[server2] $REPLY"; done) <&4 &
+SSH_PID2=$!
+
+# Funkcja do wysyłania polecenia do obu serwerów
+execute_on_both() {
+    local COMMAND=$1
+
+    # Wysyłanie polecenia na pierwszy serwer
+    echo "$COMMAND" >&3
+
+    # Wysyłanie polecenia na drugi serwer
+    echo "$COMMAND" >&4
+}
+
+# Główna pętla do odczytywania poleceń użytkownika
+while true; do
+    # Odczytywanie polecenia od użytkownika
+    read -p "Remote Shell> " USER_COMMAND
+
+    # Sprawdzenie, czy użytkownik chce zakończyć sesję
+    if [[ "$USER_COMMAND" == "exit" ]]; then
+        # Zakończenie sesji SSH
+        kill $SSH_PID1
+        kill $SSH_PID2
+        break
+    fi
+
+    # Wykonywanie polecenia na obu serwerach
+    execute_on_both "$USER_COMMAND"
+done

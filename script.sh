@@ -1,23 +1,136 @@
-#!/usr/bin/env fish
+#!/bin/bash
 
-function my_interpreter
-    echo "Interactive shell welcome"
+# A list of servers, one per line.
+SERVER_LIST='/vagrant/servers'
 
-    while true
-        set -l user_command (read -P "cmd> ")
+# Options for the ssh command.
+SSH_OPTIONS='-o ConnectTimeout=2'
 
-        if test "$user_command" = "exit"
-            echo "Close interactive view"
-            return
-        end
+usage() {
+  # Display the usage and exit.
+  echo "Usage: ${0} [-nsv] [-f FILE] COMMAND" >&2
+  echo 'Executes COMMAND as a single command on every server.' >&2
+  echo "  -f FILE  Use FILE for the list of servers. Default: ${SERVER_LIST}." >&2
+  echo '  -n       Dry run mode. Display the COMMAND that would have been executed and exit.' >&2
+  echo '  -s       Execute the COMMAND using sudo on the remote server.' >&2
+  echo '  -v       Verbose mode. Displays the server name before executing COMMAND.' >&2
+  echo '  -i       Interactive mode' >&2
+  exit 1
+}
 
-        switch $user_command
-            case "hello"
-                echo "Hello world"
-            case "*"
-                echo "Unknown command: $user_command"
-        end
-    end
-end
+declare -A db
 
-my_interpreter
+function parse_db(){
+  echo "start"
+  db_dir="_db"
+  for file in "${db_dir}"/*.list;
+  do
+    filename=$(basename "$file" .list)
+    content=$(<"$file")
+    db["$filename"]="$content"
+  done 
+    for key in "${!db[@]}"; do
+    echo "Key: $key"
+    echo "Content:"
+    echo "${db[$key]}"
+    echo "-------------------"
+  done
+}
+parse_db
+
+function get_ip() {
+  local group_name=$1
+  local index=$2
+  local content="${db[$group_name]}"
+
+  if [ -z "$content" ]; then
+    echo "No data for group: $group_name"
+    return
+  fi
+
+  IFS=$'\n' read -r -d '' -a ip_array <<< "$content"
+  
+  if [[ $index -lt ${#ip_array[@]} ]]; then
+    echo "IP at index $index: ${ip_array[$index]}"
+  else
+    echo "Index out of range"
+  fi
+}
+get_ip "group1" 1
+
+# Make sure the script is not being executed with superuser privileges.
+if [[ "${UID}" -eq 0 ]]
+then
+  echo 'Do not execute this script as root. Use the -s option instead.' >&2
+  usage
+fi
+
+# Parse the options.
+while getopts f:nsvi OPTION
+do
+  case ${OPTION} in
+    f) SERVER_LIST="${OPTARG}" ;;
+    i) RUN_INTERACTIVE='true' ;;
+    n) DRY_RUN='true' ;;
+    s) SUDO='sudo' ;;
+    v) VERBOSE='true' ;;
+    ?) usage ;;
+  esac
+done
+
+# Remove the options while leaving the remaining arguments.
+shift "$(( OPTIND - 1 ))"
+
+# If the user doesn't supply at least one argument, give them help.
+if [[ "${#}" -lt 1 && "${RUN_INTERACTIVE}" != 'true' ]]
+then
+  usage
+fi
+
+# Anything that remains on the command line is to be treated as a single command.
+COMMAND="${@}"
+
+# Make sure the SERVER_LIST file exists.
+if [[ ! -e "${SERVER_LIST}" ]]
+then
+  echo "Cannot open server list file ${SERVER_LIST}." >&2
+  exit 1
+fi
+
+# Check if user requested interactive mode
+if [[ "${RUN_INTERACTIVE}" = 'true' ]]
+then
+  rlwrap ./_interactive_shell.sh -f "${SERVER_LIST}"
+fi
+
+# Expect the best, prepare for the worst.
+EXIT_STATUS='0'
+
+# Loop through the SERVER_LIST
+for SERVER in $(cat ${SERVER_LIST})
+do
+  if [[ "${VERBOSE}" = 'true' ]]
+  then
+    echo "${SERVER}"
+  fi
+
+  SSH_COMMAND="ssh ${SSH_OPTIONS} ${SERVER} ${SUDO} ${COMMAND}"
+ 
+  # If it's a dry run, don't execute anything, just echo it.
+  if [[ "${DRY_RUN}" = 'true' ]]
+  then
+    echo "DRY RUN: ${SSH_COMMAND}"
+  else
+    ${SSH_COMMAND}
+    SSH_EXIT_STATUS="${?}"
+
+    # Capture any non-zero exit status from the SSH_COMMAND and report to the user.
+    if [[ "${SSH_EXIT_STATUS}" -ne 0 ]]
+    then
+      EXIT_STATUS=${SSH_EXIT_STATUS}
+      echo "Execution on ${SERVER} failed." >&2
+    fi 
+  fi
+done
+
+exit ${EXIT_STATUS}
