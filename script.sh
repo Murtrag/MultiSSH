@@ -38,25 +38,6 @@ function parse_db(){
 }
 parse_db
 
-function get_ip() {
-  local group_name=$1
-  local index=$2
-  local content="${db[$group_name]}"
-
-  if [ -z "$content" ]; then
-    echo "No data for group: $group_name"
-    return
-  fi
-
-  IFS=$'\n' read -r -d '' -a ip_array <<< "$content"
-  
-  if [[ $index -lt ${#ip_array[@]} ]]; then
-    echo "IP at index $index: ${ip_array[$index]}"
-  else
-    echo "Index out of range"
-  fi
-}
-get_ip "group1" 1
 
 # Make sure the script is not being executed with superuser privileges.
 if [[ "${UID}" -eq 0 ]]
