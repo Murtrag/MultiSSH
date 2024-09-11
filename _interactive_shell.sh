@@ -1,4 +1,12 @@
 #!/bin/bash
+readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+
+# Import libs
+source "${SCRIPT_DIR}/_utils/_db_op.sh"
+# source "${SCRIPT_DIR}/commands/_fasade.sh"
+
+declare -A db
+parse_db "_db"
 
 SERVER_LIST=$2
 
@@ -38,16 +46,7 @@ function my_interpreter(){
     while true;
     do
         prompt
-
-        if [ "${USER_COMMAND}" = "exit" ]; then
-            echo "Close interactive view"
-            return
-        fi
-
-        case ${USER_COMMAND} in
-            "!?"|"?") usage ;;
-            *) echo "Unknown command: $USER_COMMAND" ;;
-        esac
+        bash "${SCRIPT_DIR}/commands/_fasade.sh" "${USER_COMMAND}"
     done
 }
 
