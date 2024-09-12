@@ -13,17 +13,20 @@ then
         then
             if ! bash "${SCRIPT_DIR}/_activate.sh" "${COMMAND}"
             then
-                if ! bash "${SCRIPT_DIR}/_help.sh" "${COMMAND}"
+                if ! bash "${SCRIPT_DIR}/_deactivate.sh" "${COMMAND}"
                 then
-                    if ! bash "${SCRIPT_DIR}/_clear.sh" "${COMMAND}"
+                    if ! bash "${SCRIPT_DIR}/_help.sh" "${COMMAND}"
                     then
-                        if ! bash "${SCRIPT_DIR}/_exit.sh" "${COMMAND}" $PPID
+                        if ! bash "${SCRIPT_DIR}/_clear.sh" "${COMMAND}"
                         then
-                            bash "${SCRIPT_DIR}/_unknown.sh" "${COMMAND}"
-                        fi
-                    fi
-                fi
-            fi
-        fi
-    fi
-fi
+                            if ! bash "${SCRIPT_DIR}/_exit.sh" "${COMMAND}" $PPID
+                            then
+                                bash "${SCRIPT_DIR}/_unknown.sh" "${COMMAND}"
+                            fi # exit
+                        fi # clear
+                    fi # help
+                fi # deactivate
+            fi # activate
+        fi # group
+    fi # groups
+fi # status
