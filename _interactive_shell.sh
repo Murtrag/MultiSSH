@@ -11,7 +11,12 @@ parse_db "_db"
 SERVER_LIST=$2
 
 function prompt(){
-    read -p "cmd> " USER_COMMAND # &>/dev/null
+    local resources=$(cat "${SCRIPT_DIR}/_db/.current_resource" | xargs)
+    if [[ "${resources}" != "" ]]
+    then
+        resources="(${resources})"
+    fi
+    read -p "${resources} cmd> " USER_COMMAND # &>/dev/null
     tput cuu1
     echo -ne "\033[K"
     echo "cmd> ${USER_COMMAND}"
