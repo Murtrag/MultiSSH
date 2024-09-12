@@ -69,6 +69,4 @@ test_get_record_by_name() {
 }
 
 
-
-
 . /usr/bin/shunit2
