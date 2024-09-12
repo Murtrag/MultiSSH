@@ -21,19 +21,25 @@ then
         exit 1
     fi
 
-    IFS=$'\n' 
-    for node in ${db[$args]}; do
-        ip=$(echo "$node" | awk -F '[()]' '{print $1}')
-        name=$(echo "$node" | awk -F '[()]' '{print $2}')
-        
-        nc -zv "$ip" 22 2>&1 | awk -v name="$name" '{$1=name; print}'
+        IFS=$'\n'
+        table_value="name|ip|port|status\n"
+        for node in ${db[$args]}
+        do
+            ip=$(echo "$node" | awk -F '[()]' '{print $1}' | xargs)
+            name=$(echo "$node" | awk -F '[()]' '{print $2}')
+            
+            nc -zv -w 5 "$ip" 22 &> /dev/null 
+            if [[ $? -eq 0 ]]; then
+                status="open"
+            elif [[ $? -eq 1 ]]; then
+                status="closed"
+            else
+                status="timeout"
+            fi
+            table_value+="$name|$ip|22|$status\n"
     done
-    unset IFS  # Przywracamy domyślne IFS
-
-    # If no group name, check if any activated
-    # db_key=$args # args || active > depends on the situation
-
-    # printTable ' ' "$(echo "name ip"; echo "${db[$db_key]}" | awk -F '[()]' '{print $2, $1}')"
+    unset IFS
+    printTable '|' "${table_value}"
     exit 0
 fi
 exit 1
