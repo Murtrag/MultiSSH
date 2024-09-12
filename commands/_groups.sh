@@ -25,13 +25,13 @@ then
         exit 0
     fi
 
-    table_value=""
+    table_value="name|node_count\n"
     for key in "${!db[@]}"
     do
         line_count=$(echo "${db[$key]}" | wc -l)
-        table_value+="$key $line_count\n"
+        table_value+="$key|$line_count\n"
     done
-    printTable ' ' "$(echo "name node_count"; echo "${table_value}" | awk -F '[()]' '{print $1, $2}')"
+    printTable '|' "${table_value}"
 
     exit 0
 fi
