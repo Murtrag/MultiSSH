@@ -7,15 +7,21 @@ readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
 readonly COMMAND=$1 
 
-function ussage(){
-    echo
+function usage(){
+    echo "groups help"
 }
 
 if [[ "$COMMAND" =~ ^(!groups|!gs) ]]
 then
+    readonly args=`echo "$COMMAND" | awk '{$1=""; print $0}' | xargs`
+    # Check if user asks for help
+    if [[ "${args}" = "?" ]]
+    then
+        usage
+        exit 0
+    fi
     declare -A db
     parse_db "${SCRIPT_DIR}/../_db/"
-    readonly args=`echo "$COMMAND" | awk '{$1=""; print $0}' | xargs`
     # If extra parameters falsly specified, display ussage 
 
     if [[ "$(echo $args | wc -w)" -gt "0" ]]

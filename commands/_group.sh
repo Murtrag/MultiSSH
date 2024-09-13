@@ -9,15 +9,21 @@ readonly COMMAND=$1
 
 
 
-function ussage(){
-    echo
+function usage(){
+    echo "group help"
 }
 
 if [[ "$COMMAND" =~ ^(!group|!g) ]]
 then
+    readonly args=`echo "$COMMAND" | awk '{$1=""; print $0}' | xargs`
+    # Check if user asks for help
+    if [[ "${args}" = "?" ]]
+    then
+        usage
+        exit 0
+    fi
     declare -A db
     parse_db "${SCRIPT_DIR}/../_db/"
-    readonly args=`echo "$COMMAND" | awk '{$1=""; print $0}' | xargs`
     db_key=''
 
     # Check if group name specified
