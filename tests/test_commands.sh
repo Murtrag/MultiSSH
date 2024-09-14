@@ -118,8 +118,18 @@ test_activate(){
 test_deactivate(){
     expected_output=""
     command_output=""
+    # Test all deactivation
 
-    # test deactivation
+    # Test group deactivation
+    # !a group1
+
+    # Test blade deactivation
+    # !a group1:blade1
+
+    # Test list of  resources deactivation
+    # !a group1,group2,group3:blade4
+
+    # Test bad resource deactivation
     assertEquals "Content of group2 should match" "${expected_output}" "${command_output}"
 }
 
@@ -130,7 +140,6 @@ test_exit(){
     pid=$!
     expected_process_status="killed"
     echo "Y" | bash "${SCRIPT_DIR}/../commands/_exit.sh" "exit" ${pid}
-    sleep 1s
 
     if kill -0 $pid 2>/dev/null; then
         process_status="alive"
