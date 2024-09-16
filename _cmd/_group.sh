@@ -2,24 +2,24 @@
 readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
 . "${SCRIPT_DIR}/../_utils/_db_op.sh"
+. "${SCRIPT_DIR}/../_utils/_beautiful_table.sh"
 
 
 readonly COMMAND=$1 
 
 
 
-function ussage(){
-    echo "Explenation how you use this coomand"
+function usage(){
+    echo "group help"
 }
 
-if [[ "$COMMAND" =~ ^(!activate|!a) ]]
+if [[ "$COMMAND" =~ ^(!group|!g) ]]
 then
     readonly args=`echo "$COMMAND" | awk '{$1=""; print $0}' | xargs`
-
     # Check if user asks for help
     if [[ "${args}" = "?" ]]
     then
-        ussage
+        usage
         exit 0
     fi
     declare -A db
@@ -29,18 +29,16 @@ then
     # Check if group name specified
     if [[ "$(echo $args | wc -w)" -ne "1" ]]
     then
-        echo "Please specify resource to activate"
+        echo "Please specify name of group"
         exit 1
     fi
 
-    # Check if resources are available
+    # If no group name, check if any activated
+    db_key=$args # args || active > depends on the situation
 
-    # Update
-    echo echo "Activating resource $args"
-    echo $args > "${SCRIPT_DIR}/../_db/.current_resource"
+    echo "${db[$db_key]}" | awk -F '[()]' '{print $2, $1}' | sed 's/:/ /g'
 
-
-    
+    printTable ' ' "$(echo "name ip port"; echo "${db[$db_key]}" | awk -F '[()]' '{print $2, $1}' | sed 's/:/ /g') | column"
     exit 0
 fi
 exit 1

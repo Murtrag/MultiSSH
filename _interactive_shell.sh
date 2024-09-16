@@ -3,7 +3,7 @@ readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
 # Import libs
 source "${SCRIPT_DIR}/_utils/_db_op.sh"
-# source "${SCRIPT_DIR}/commands/_fasade.sh"
+# source "${SCRIPT_DIR}/_cmd/_fasade.sh"
 
 declare -A db
 parse_db "_db"
@@ -51,7 +51,7 @@ function my_interpreter(){
     while true;
     do
         prompt
-        bash "${SCRIPT_DIR}/commands/_fasade.sh" "${USER_COMMAND}"
+        bash "${SCRIPT_DIR}/_cmd/_fasade.sh" "${USER_COMMAND}"
     done
 }
 
