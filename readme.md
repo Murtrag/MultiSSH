@@ -76,6 +76,7 @@ This flexibility allows for running specific test cases or groups of tests when 
 ## Contributing
 
 ## License
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details.
 
 ## Authors
 - Lukasz Czernik - [lukasz.czernik@gmail.com](mailto:lukasz.czernik@gmail.com)
