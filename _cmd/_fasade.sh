@@ -21,7 +21,10 @@ then
                         then
                             if ! bash "${SCRIPT_DIR}/_exit.sh" "${COMMAND}" $PPID
                             then
-                                bash "${SCRIPT_DIR}/_unknown.sh" "${COMMAND}"
+                                if ! bash "${SCRIPT_DIR}/_execute.sh" "${COMMAND}"
+                                then
+                                    bash "${SCRIPT_DIR}/_unknown.sh" "${COMMAND}"
+                                fi # execute
                             fi # exit
                         fi # clear
                     fi # help
