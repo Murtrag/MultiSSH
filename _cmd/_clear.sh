@@ -14,7 +14,7 @@ then
         ussage
         exit 0
     fi
-    # clear
+    clear
     exit 0
 fi
 exit 1

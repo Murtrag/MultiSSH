@@ -13,12 +13,41 @@ function usage(){
     echo "Explenation how you use this coomand"
 }
 
+function open_session(){
+    local ip=$1
+    local port=$2
+    local group_name=$3
+    local name=$4
+    local user=$5
+    (tmux new-session -d -s "${group_name}-${name}" \
+    "ssh \
+    -i /home/vagrant/.ssh/my_vagrant_key \
+    -o StrictHostKeyChecking=no\
+     ${user}@${ip} \
+    -p ${port}") &>/dev/null
+}
+
+function activate(){
+    local ip=$1
+    local port=$2
+    local group_name=$3
+    local name=$4
+    local user=$5
+
+    open_session "$ip" "$port" "$group_name" "$name" "$user"
+    resource_duplicates=$(grep -F "$resource" "$current_resource")
+    if [[ -z "${resource_duplicates}" ]]
+    then
+        # GROUP BLOCK
+        echo $resource >> $current_resource
+    fi
+}
+
 if [[ "$COMMAND" =~ ^(!activate|!a) ]]
 then
     readonly args=`echo "$COMMAND" | awk '{$1=""; print $0}' | xargs`
 
     # Check if user asks for help
-    echo 'Check if user asks for help'
     if [[ "${args}" = "?" ]]
     then
         usage
@@ -27,43 +56,15 @@ then
     declare -A db
     parse_db "${SCRIPT_DIR}/../_db/"
 
+    
     # Check if group name specified
-    echo 'Check if group name specified'
-    if [[ "$(echo $args | wc -w)" -ne "1" ]]
+
+    if [[ $args = "" ]] 
     then
         echo "Please specify resource to activate"
-        exit 1
+        exit 0
     else # If param specified
-        IFS=","
-        for resource in $args
-        do
-            resource_duplicates=$(grep -F "$resource" "$current_resource")
-            # echo "$resource"
-            if [[ "$resource" =~ .*:.* ]]
-            then 
-                key=$(echo "$resource" | awk -F ":" '{print $1}')
-                value=$(echo "$resource" | awk -F ":" '{print $2}')
-                name_exist=$(grep -F "$resource" "$current_resource")
-                # echo "name exist?: "$name_exist
-                if [[ -v db["$key"] && -z "${name_exist}" ]]
-                then
-                    echo "Activating resource $resource"
-                    echo $resource >> $current_resource
-                fi
-            elif [[ -v db["$resource"] && -z "${resource_duplicates}" ]]
-            then
-                echo "Activating resource $resource"
-                echo $resource >> $current_resource
-
-            elif [[ -n "${resource_duplicates}" ]]
-            then
-                echo "Resource ${resource} already activated. skipping."
-
-            else
-                echo "Resource ${resource} could no be found. skipping."
-            fi
-        done
-        unset IFS
+        execute_on_group $args activate
     fi
 
     exit 0

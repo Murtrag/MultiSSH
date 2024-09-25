@@ -12,14 +12,21 @@ SERVER_LIST=$2
 
 function prompt(){
     local resources=$(cat "${SCRIPT_DIR}/_db/.current_resource" | xargs)
+    # Check if any activated && build prompt
     if [[ "${resources}" != "" ]]
     then
-        resources="(${resources})"
+        resources="(${resources}) "
+
     fi
-    read -p "${resources} cmd> " USER_COMMAND # &>/dev/null
+    # Display user prompt
+    # read -p "${resources}cmd> " USER_COMMAND # &>/dev/null
+    # read -e -p "$(echo -e "\033[0;34m${resources}\033[0m\033[1;33mcmd>\033[0m ")" USER_COMMAND
+    echo -ne "\033[0;34m${resources}\033[0m\033[1;33mcmd>\033[0m "
+    read USER_COMMAND
     tput cuu1
     echo -ne "\033[K"
-    echo "cmd> ${USER_COMMAND}"
+    # echo "${resources}cmd> ${USER_COMMAND}"
+    echo -e "\033[0;34m${resources}\033[0m\033[1;33mcmd>\033[0m ${USER_COMMAND}"
 }
 
 function usage(){
@@ -48,12 +55,28 @@ function usage(){
 function my_interpreter(){
     echo "Interactive shell welcome"
 
+    trap ctrl_c_handler SIGINT
+
     while true;
     do
         prompt
-        bash "${SCRIPT_DIR}/_cmd/_fasade.sh" "${USER_COMMAND}"
+        bash "${SCRIPT_DIR}/_cmd/_fasade.sh" "${USER_COMMAND}" &
+        current_pid=$!
+        wait "$current_pid"
+        current_pid=""
     done
 }
 
+function ctrl_c_handler(){
+    if [[ -n "$current_pid" ]]; then
+        echo "Ctrl+C detected. Killing process $current_pid..."
+        kill -SIGINT "$current_pid"  # Zabij zawieszony proces
+        wait "$current_pid"  # Upewnij się, że proces się zakończył
+        current_pid=""
+    else
+        echo "No process to kill. Continuing..."
+        echo "Ctrl+C Exiting."
+    fi
+}
 # Uruchom skrypt przez rlwrap
 my_interpreter

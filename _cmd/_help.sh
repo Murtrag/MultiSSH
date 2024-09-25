@@ -11,6 +11,11 @@ if [[ "$COMMAND" =~ ^(!help|!h) ]]
 then
     readonly args=`echo "$COMMAND" | awk '{$1=""; print $0}' | xargs`
     # If extra parameter specified display ussage
+    if [[ $args = "" ]]
+    then
+        echo "General help"
+        exit 0
+    fi
     
     file_name=$(echo "_${args}" | sed 's/^_!/_/')
     if [[ "$args" != "" && -e "${SCRIPT_DIR}/${file_name}.sh" ]]

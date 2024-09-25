@@ -1,9 +1,8 @@
-function printTable()
-{
+function print_table(){
     local -r delimiter="${1}"
-    local -r data="$(removeEmptyLines "${2}")"
+    local -r data="$(remove_empty_lines "${2}")"
 
-    if [[ "${delimiter}" != '' && "$(isEmptyString "${data}")" = 'false' ]]
+    if [[ "${delimiter}" != '' && "$(is_empty_string "${data}")" = 'false' ]]
     then
         local -r numberOfLines="$(wc -l <<< "${data}")"
 
@@ -24,7 +23,7 @@ function printTable()
 
                 if [[ "${i}" -eq '1' ]]
                 then
-                    table="${table}$(printf '%s#+' "$(repeatString '#+' "${numberOfColumns}")")"
+                    table="${table}$(printf '%s#+' "$(repeat_string '#+' "${numberOfColumns}")")"
                 fi
 
                 # Add Header Or Body
@@ -44,11 +43,11 @@ function printTable()
 
                 if [[ "${i}" -eq '1' ]] || [[ "${numberOfLines}" -gt '1' && "${i}" -eq "${numberOfLines}" ]]
                 then
-                    table="${table}$(printf '%s#+' "$(repeatString '#+' "${numberOfColumns}")")"
+                    table="${table}$(printf '%s#+' "$(repeat_string '#+' "${numberOfColumns}")")"
                 fi
             done
 
-            if [[ "$(isEmptyString "${table}")" = 'false' ]]
+            if [[ "$(is_empty_string "${table}")" = 'false' ]]
             then
                 echo -e "${table}" | column -s '#' -t | awk '/^\+/{gsub(" ", "-", $0)}1'
             fi
@@ -56,14 +55,14 @@ function printTable()
     fi
 }
 
-function removeEmptyLines()
+function remove_empty_lines()
 {
     local -r content="${1}"
 
     echo -e "${content}" | sed '/^\s*$/d'
 }
 
-function repeatString()
+function repeat_string()
 {
     local -r string="${1}"
     local -r numberToRepeat="${2}"
@@ -75,11 +74,11 @@ function repeatString()
     fi
 }
 
-function isEmptyString()
+function is_empty_string()
 {
     local -r string="${1}"
 
-    if [[ "$(trimString "${string}")" = '' ]]
+    if [[ "$(trim_string "${string}")" = '' ]]
     then
         echo 'true' && return 0
     fi
@@ -87,7 +86,7 @@ function isEmptyString()
     echo 'false' && return 1
 }
 
-function trimString()
+function trim_string()
 {
     local -r string="${1}"
 

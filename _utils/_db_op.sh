@@ -1,5 +1,10 @@
 #!/bin/bash
 # DB operations
+# SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+if [[ -z "${SCRIPT_DIR:-}" ]]; then
+    SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+    readonly SCRIPT_DIR
+fi
 
 declare -A db
 
@@ -97,8 +102,6 @@ function update_db(){
     # output: exit 0 or 1
     db_dir="${1}"
     raw_file="${2}"
-    echo ${raw_file}
-    echo ${db_dir}
 
     rm -f "${db_dir}"/*.list
     awk -v RS= '{print > ("'"${db_dir}"'/group" NR ".list")}' "${raw_file}"
@@ -110,4 +113,61 @@ function update_db(){
         rm "${file}"
         echo "${new_content}" > "${db_dir}/${new_filename}"
     done
+}
+
+function execute_on_group(){
+    # HoF to perform func on the selected group
+    # usage: execute_on_group func_name
+    # input: <group_name> <function <ip> <port> <group_name> <name>>
+    # output: exit 0 or 1
+    local group_name=$1 # Coma separated values
+    local func=$2
+    local db_path=${3:-"${SCRIPT_DIR}/../_db"}
+    parse_db "$db_path"
+
+    function pass_to_func(){
+            local group=$1
+            local node=$2
+
+            host_and_port=$(echo "$node" | awk -F '[()]' '{print $1}' | xargs)
+            login_host=$(echo "${host_and_port}" | awk -F ':' '{print $1}')
+            if [[ "$login_host" == *@* ]]; then
+                user=$(echo "${login_host}" | awk -F '@' '{print $1}')
+                ip=$(echo "${login_host}" | awk -F '@' '{print $2}')
+            else
+                user="vagrant" # Default user 
+                ip="$login_host"
+            fi
+            port=$(echo "${host_and_port}" | awk -F ':' '{print $2}')
+            port=${port:-22}
+            name=$(echo "$node" | awk -F '[()]' '{print $2}')
+            $func "$ip" "$port" "$group" "$name" "$user"
+    }
+
+
+    IFS=',' read -r -a group_names <<< "$group_name" 
+
+    for resource in "${group_names[@]}"
+    do
+        # Check if resource follows <group>:<name>
+        if [[ "${resource}" =~ .+:.+ ]]; then
+            local node_group="$(echo ${resource} | awk -F ':' '{print $1}')"
+            local node_name="$(echo ${resource} | awk -F ':' '{print $2}')"
+            local node
+            node=$(get_record_by_name "${node_group}" "${node_name}")
+            if [[ "$?" -ne 1 ]]
+            then
+                pass_to_func "${node_group}" "${node}"
+            fi
+        else
+            IFS=$'\n'
+            for node in ${db[$resource]}
+            do
+                pass_to_func "${resource}" "${node}" 
+            done
+        fi
+    done
+
+    unset IFS
+
 }

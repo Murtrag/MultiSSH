@@ -37,7 +37,7 @@ then
         line_count=$(echo "${db[$key]}" | wc -l)
         table_value+="$key|$line_count\n"
     done
-    printTable '|' "${table_value}"
+    print_table '|' "${table_value}"
 
     exit 0
 fi

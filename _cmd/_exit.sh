@@ -15,6 +15,7 @@ then
         usage
         exit 0
     fi
+    kill "$parent_pid"
     read -p "Do you really want to exit? y/N: " is_exiting
     is_exiting=$(echo "$is_exiting" | tr '[:upper:]' '[:lower:]')
     if [[ "$is_exiting" != "y" ]]

@@ -1,14 +1,19 @@
-    #!/bin/bash
-    readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+#!/bin/bash
+readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
-    . "${SCRIPT_DIR}/../_utils/_db_op.sh"
+. "${SCRIPT_DIR}/../_utils/_db_op.sh"
 readonly current_resource="$(cat ${SCRIPT_DIR}/../_db/.current_resource)"
 
-    readonly COMMAND=$1 
+readonly COMMAND=$1 
 
     function ussage(){
-        echo "Explenation how you use this coomand"
+        echo "Explenation how you use this async coomand"
     }
+
+function execute_command_async() {
+    echo
+    execute_command "$@" &
+}
 
 function execute_command() {
     local ip=$1
@@ -41,13 +46,14 @@ function execute_command() {
 
     # Display the difference with the command output
     # echo "${name}($ip):"
+    echo
     echo -e "\033[0;32m${name}\033[0m(\033[0;31m${ip}\033[0m):"
     diff <(echo "$before") <(echo "$after") | grep ">" | grep -v "$signal_done" | sed 's/> //g'
     echo
 }
 
 
-    if [[ "$COMMAND" =~ ^(!execute|!e) ]]
+    if [[ "$COMMAND" =~ ^(!execute-async|!ea) ]]
     then
         readonly args=`echo "$COMMAND" | awk '{$1=""; print $0}' | xargs`
         # Check if user asks for help
@@ -63,7 +69,7 @@ function execute_command() {
         # Iterate all active resources
         current_resource2=$(echo "${current_resource}" | tr '\n' ',')
 
-        execute_on_group $current_resource2 execute_command
+        execute_on_group $current_resource2 execute_command_async
         exit 0
     fi
     exit 1
