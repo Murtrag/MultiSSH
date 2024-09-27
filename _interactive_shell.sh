@@ -19,13 +19,11 @@ function prompt(){
 
     fi
     # Display user prompt
-    # read -p "${resources}cmd> " USER_COMMAND # &>/dev/null
-    # read -e -p "$(echo -e "\033[0;34m${resources}\033[0m\033[1;33mcmd>\033[0m ")" USER_COMMAND
     echo -ne "\033[0;34m${resources}\033[0m\033[1;33mcmd>\033[0m "
     read USER_COMMAND
     tput cuu1
-    echo -ne "\033[K"
-    # echo "${resources}cmd> ${USER_COMMAND}"
+    # echo -ne "\033[K"
+    tput el
     echo -e "\033[0;34m${resources}\033[0m\033[1;33mcmd>\033[0m ${USER_COMMAND}"
 }
 
@@ -60,10 +58,7 @@ function my_interpreter(){
     while true;
     do
         prompt
-        bash "${SCRIPT_DIR}/_cmd/_fasade.sh" "${USER_COMMAND}" &
-        current_pid=$!
-        wait "$current_pid"
-        current_pid=""
+        bash "${SCRIPT_DIR}/_cmd/_fasade.sh" "${USER_COMMAND}"
     done
 }
 
@@ -75,7 +70,8 @@ function ctrl_c_handler(){
         current_pid=""
     else
         echo "No process to kill. Continuing..."
-        echo "Ctrl+C Exiting."
+        exit 0
+        bash "$SCRIPT_DIR/_cmd/_exit/_main.sh" "exit" "$PPID"
     fi
 }
 # Uruchom skrypt przez rlwrap

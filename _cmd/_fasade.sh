@@ -5,25 +5,27 @@ readonly COMMAND=$1
 
 
 # CoR
-if ! bash "${SCRIPT_DIR}/_status.sh" "${COMMAND}"
+if ! bash "${SCRIPT_DIR}/_status/_main.sh" "${COMMAND}"
 then
-    if ! bash "${SCRIPT_DIR}/_groups.sh" "${COMMAND}"
+    if ! bash "${SCRIPT_DIR}/_groups/_main.sh" "${COMMAND}"
     then
-        if ! bash "${SCRIPT_DIR}/_group.sh" "${COMMAND}"
+        if ! bash "${SCRIPT_DIR}/_group/_main.sh" "${COMMAND}"
         then
-            if ! bash "${SCRIPT_DIR}/_activate.sh" "${COMMAND}"
+            if ! bash "${SCRIPT_DIR}/_activate/_main.sh" "${COMMAND}"
             then
-                if ! bash "${SCRIPT_DIR}/_deactivate.sh" "${COMMAND}"
+                if ! bash "${SCRIPT_DIR}/_deactivate/_main.sh" "${COMMAND}"
                 then
-                    if ! bash "${SCRIPT_DIR}/_help.sh" "${COMMAND}"
+                    if ! bash "${SCRIPT_DIR}/_help/_main.sh" "${COMMAND}"
                     then
-                        if ! bash "${SCRIPT_DIR}/_clear.sh" "${COMMAND}"
+                        if ! bash "${SCRIPT_DIR}/_clear/_main.sh" "${COMMAND}"
                         then
-                            if ! bash "${SCRIPT_DIR}/_exit.sh" "${COMMAND}" $PPID
+                            if ! bash "${SCRIPT_DIR}/_exit/_main.sh" "${COMMAND}" $PPID
                             then
-                                if ! bash "${SCRIPT_DIR}/_execute-async.sh" "${COMMAND}"
+                                if ! bash "${SCRIPT_DIR}/_execute-async/_main.sh" "${COMMAND}"
                                 then
-                                    if ! bash "${SCRIPT_DIR}/_execute.sh" "${COMMAND}"
+                                    last_pid=$BASHPID
+                                    echo $last_pid
+                                    if ! bash "${SCRIPT_DIR}/_execute/_main.sh" "${COMMAND}"
                                     then
                                         bash "${SCRIPT_DIR}/_unknown.sh" "${COMMAND}"
                                     fi # execute

@@ -1,15 +1,11 @@
 #!/bin/bash
 readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
-. "${SCRIPT_DIR}/../_utils/_db_op.sh"
-. "${SCRIPT_DIR}/../_utils/_beautiful_table.sh"
-
+. "${SCRIPT_DIR}/../../_utils/_db_op.sh"
+. "${SCRIPT_DIR}/_help.sh"
+. "${SCRIPT_DIR}/../../_utils/_beautiful_table.sh"
 
 readonly COMMAND=$1 
-
-function usage(){
-    echo "groups help"
-}
 
 if [[ "$COMMAND" =~ ^(!groups|!gs) ]]
 then
@@ -21,7 +17,7 @@ then
         exit 0
     fi
     declare -A db
-    parse_db "${SCRIPT_DIR}/../_db/"
+    parse_db "${SCRIPT_DIR}/../../_db/"
     # If extra parameters falsly specified, display ussage 
 
     if [[ "$(echo $args | wc -w)" -gt "0" ]]
@@ -38,7 +34,6 @@ then
         table_value+="$key|$line_count\n"
     done
     print_table '|' "${table_value}"
-
     exit 0
 fi
 exit 1

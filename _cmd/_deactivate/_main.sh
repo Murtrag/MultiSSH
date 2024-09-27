@@ -1,27 +1,15 @@
 #!/bin/bash
 
 readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
-readonly current_resource="$(cat ${SCRIPT_DIR}/../_db/.current_resource)"
+readonly current_resource="$(cat ${SCRIPT_DIR}/../../_db/.current_resource)"
 
-. "${SCRIPT_DIR}/../_utils/_db_op.sh"
+. "${SCRIPT_DIR}/../../_utils/_db_op.sh"
+. "${SCRIPT_DIR}/_help.sh"
+. "${SCRIPT_DIR}/_utils.sh"
 
 
 readonly COMMAND=$1 
 
-function usage(){
-    echo "Deactivate help"
-}
-
-function close_session(){
-    local ip=$1
-    local port=$2
-    local group_name=$3
-    local name=$4
-    local user=$5
-    echo "closing $group_name _ $name"
-    (tmux kill-session -t "${group_name}-${name}") &>/dev/null
-
-}
 
 if [[ "$COMMAND" =~ ^(!deactivate|!da) ]]
 then
@@ -39,15 +27,15 @@ then
         IFS=","
         for resource in $args
         do
-            sed -i "/^${resource}.*$/d" "${SCRIPT_DIR}/../_db/.current_resource"
+            sed -i "/^${resource}.*$/d" "${SCRIPT_DIR}/../../_db/.current_resource"
             execute_on_group $resource close_session
         done
         unset IFS
         exit 0
     elif [[ "${current_resource}" != "" ]]
     then
-        rm "${SCRIPT_DIR}/../_db/.current_resource"
-        touch "${SCRIPT_DIR}/../_db/.current_resource"
+        rm "${SCRIPT_DIR}/../../_db/.current_resource"
+        touch "${SCRIPT_DIR}/../../_db/.current_resource"
         (tmux ls | awk -F: '{print $1}' | xargs -I {} tmux kill-session -t {}) &>/dev/null
         echo "Deactivating resource ${args:-All}"
         exit 0

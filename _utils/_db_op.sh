@@ -122,7 +122,7 @@ function execute_on_group(){
     # output: exit 0 or 1
     local group_name=$1 # Coma separated values
     local func=$2
-    local db_path=${3:-"${SCRIPT_DIR}/../_db"}
+    local db_path=${3:-"${SCRIPT_DIR}/../../_db"}
     parse_db "$db_path"
 
     function pass_to_func(){

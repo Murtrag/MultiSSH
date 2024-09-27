@@ -1,27 +1,13 @@
 #!/bin/bash
 readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
-. "${SCRIPT_DIR}/../_utils/_db_op.sh"
-. "${SCRIPT_DIR}/../_utils/_beautiful_table.sh"
+. "${SCRIPT_DIR}/../../_utils/_db_op.sh"
+. "${SCRIPT_DIR}/_utils.sh"
+. "${SCRIPT_DIR}/_help.sh"
+. "${SCRIPT_DIR}/../../_utils/_beautiful_table.sh"
 
-readonly current_resource="$(cat ${SCRIPT_DIR}/../_db/.current_resource)"
-
-
+readonly current_resource="$(cat ${SCRIPT_DIR}/../../_db/.current_resource)"
 readonly COMMAND=$1 
-
-function check_group(){
-    local ip=$1
-    local port=$2
-    local group_name=$3
-    local name=$4
-    local user=$5
-    table_value+="$group_name|$name|$ip|$port\n"
-}
-
-
-function usage(){
-    echo "group help"
-}
 
 if [[ "$COMMAND" =~ ^(!group|!g) ]]
 then
@@ -33,7 +19,7 @@ then
         exit 0
     fi
     declare -A db
-    parse_db "${SCRIPT_DIR}/../_db/"
+    parse_db "${SCRIPT_DIR}/../../_db/"
     
     table_value="group|name|ip|port\n"
     if [[ $args != "" ]] 

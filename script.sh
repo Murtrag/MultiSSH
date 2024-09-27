@@ -1,7 +1,9 @@
 #!/bin/bash
+readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+. "$SCRIPT_DIR/_utils/_db_op.sh"
 
 # A list of servers, one per line.
-SERVER_LIST='/vagrant/servers'
+SERVER_LIST="${SCRIPT_DIR}/_db"
 
 # Options for the ssh command.
 SSH_OPTIONS='-o ConnectTimeout=2'
@@ -20,23 +22,23 @@ usage() {
 
 declare -A db
 
-function parse_db(){
-  echo "start"
-  db_dir="_db"
-  for file in "${db_dir}"/*.list;
-  do
-    filename=$(basename "$file" .list)
-    content=$(<"$file")
-    db["$filename"]="$content"
-  done 
-    for key in "${!db[@]}"; do
-    echo "Key: $key"
-    echo "Content:"
-    echo "${db[$key]}"
-    echo "-------------------"
-  done
-}
-parse_db
+# function parse_db(){
+#   echo "start"
+#   db_dir="_db"
+#   for file in "${db_dir}"/*.list;
+#   do
+#     filename=$(basename "$file" .list)
+#     content=$(<"$file")
+#     db["$filename"]="$content"
+#   done 
+#     for key in "${!db[@]}"; do
+#     echo "Key: $key"
+#     echo "Content:"
+#     echo "${db[$key]}"
+#     echo "-------------------"
+#   done
+# }
+parse_db $SERVER_LIST
 
 
 # Make sure the script is not being executed with superuser privileges.

@@ -1,9 +1,8 @@
 #!/bin/bash
-readonly COMMAND=$1 
+readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+. "${SCRIPT_DIR}/_help.sh"
 
-function ussage(){
-    echo "Explenation how you use this coomand"
-}
+readonly COMMAND=$1 
 
 if [[ "$COMMAND" =~ ^clear ]]
 then
@@ -11,7 +10,7 @@ then
     # Check if user asks for help
     if [[ "${args}" = "?" ]]
     then
-        ussage
+        usage
         exit 0
     fi
     clear
