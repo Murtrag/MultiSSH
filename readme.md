@@ -2,24 +2,25 @@
 **MultiSSH** is a lightweight, versatile shell script tool designed to execute commands across multiple SSH servers simultaneously. Whether you're managing server configurations or performing bulk operations, MultiSSH provides an efficient, minimalistic solution with minimal dependencies.
 
 ## Description
-
-**MultiSSH** is a simple yet powerful shell script designed to streamline the management of multiple SSH servers. It allows users to execute commands on numerous servers simultaneously, making it ideal for tasks such as system administration, server configuration, or automating large-scale maintenance routines.
+MultiSSH is a simple yet powerful shell script, crafted to streamline the management of multiple SSH servers. It allows users to execute commands on numerous servers at once, making it ideal for tasks such as system administration, server configuration, or automating large-scale maintenance routines.
 
 With its lightweight nature and lack of complex dependencies, MultiSSH integrates seamlessly into existing workflows, providing quick setup and usage. This makes it particularly useful for DevOps teams, network administrators, and anyone working in environments with extensive server infrastructures.
 
-### Key Features
+Key features include the ability to activate/deactivate specific groups or individual servers, check server statuses, and execute commands both synchronously and asynchronously, offering users full control over their server operations.
 
-- Execute commands across multiple servers in parallel.
-- Activate or deactivate entire groups of servers or individual servers.
-- Check the real-time status of SSH connections and server health.
-- Minimal dependencies, making it easy to deploy and use in any shell environment.
-- Ideal for large infrastructures, allowing bulk server operations and automation.
+Key Benefits:
 
-### Ideal Use Cases
+    Execute commands across multiple servers in parallel.
+    Activate or deactivate entire groups of servers or individual servers.
+    Check the real-time status of SSH connections and server health.
+    Minimal dependencies, making it easy to deploy and use in any shell environment.
+    Ideal for large infrastructures, allowing bulk server operations and automation.
 
-- DevOps teams managing large server fleets.
-- System administrators handling configuration or routine maintenance tasks.
-- Automation scripts for server health checks, updates, or batch operations.
+Ideal Use Cases:
+
+    DevOps teams managing large server fleets.
+    System administrators handling configuration or routine maintenance tasks.
+    Automation scripts for server health checks, updates, or batch operations.
 
 ## Table of Contents
 - [Installation](#installation)
@@ -29,10 +30,29 @@ With its lightweight nature and lack of complex dependencies, MultiSSH integrate
 - [Contributing](#contributing)
 - [License](#license)
 - [Authors](#authors)
-- [Acknowledgements](#acknowledgements)
 
 ## Installation
-Comming soon
+Clone the repository:
+
+bash
+
+git clone https://github.com/Murtrag/MultiSSH.git
+
+Make the setup script executable:
+
+chmod +x setup.sh
+
+Run the setup script:
+
+./setup.sh
+
+This script will:
+
+    Copy the repository to /home/$USER/MultiSSH
+    Create a symlink for the multiSSH.sh script in /usr/local/bin/, so you can use the command multissh from anywhere.
+    Add execution permissions to the multiSSH.sh script.
+
+Distro packages: Coming soon.
 
 ## Usage
 **MultiSSH** can be used in two modes: **standard command-line mode** and **interactive mode**.
