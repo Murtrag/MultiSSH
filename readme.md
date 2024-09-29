@@ -32,27 +32,33 @@ Ideal Use Cases:
 - [Authors](#authors)
 
 ## Installation
-Clone the repository:
 
-bash
+To install **MultiSSH**, follow these steps:
 
-git clone https://github.com/Murtrag/MultiSSH.git
+1. **Clone the repository:**
 
-Make the setup script executable:
+   ```bash
+   git clone https://github.com/Murtrag/MultiSSH.git
+   ```
 
-chmod +x setup.sh
+2. **Make the setup script executable:**
 
-Run the setup script:
+   ```bash
+   chmod +x setup.sh
+   ```
 
-./setup.sh
+3. **Run the setup script:**
 
-This script will:
+   ```bash
+   ./setup.sh
+   ```
 
-    Copy the repository to /home/$USER/MultiSSH
-    Create a symlink for the multiSSH.sh script in /usr/local/bin/, so you can use the command multissh from anywhere.
-    Add execution permissions to the multiSSH.sh script.
+   This script will:
+   - Copy the repository to `/home/$USER/MultiSSH`
+   - Create a symlink for the `multiSSH.sh` script in `/usr/local/bin/`, allowing you to use the command `multissh` from anywhere.
+   - Add execution permissions to the `multiSSH.sh` script.
 
-Distro packages: Coming soon.
+**Distro packages:** Coming soon.
 
 ## Usage
 **MultiSSH** can be used in two modes: **standard command-line mode** and **interactive mode**.
