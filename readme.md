@@ -36,28 +36,141 @@ Executes COMMAND as a single command on every server.
 - -v: Enables verbose mode, showing the server name before executing the command.
 - -i: Starts the program in interactive mode.
 ### Interactive Mode:
+
 In interactive mode, you can run commands dynamically to manage groups of servers. The available commands are:
 ```
-Commands:
-  !groups, !gs              Show all available groups
-                            Example: !gs
+!gs or !groups          - Display available groups.
+!g or !group [GROUP]    - Display available servers in the specified group or in the active group if none is provided.
+!a or !activate [RESOURCE]   - Activate the specified resources (group or server).
+!da or !deactivate [RESOURCE] - Deactivate the specified resources (group or server).
+!s or !status           - Display the status of the active group of servers, including SSH status and connection status.
+exit                    - Exit the session and disconnect from active SSH servers.
 
-  !group <group_name>, !g <group_name>
-                            Show all servers in the specified group
-                            Example: !g home_cluster
-
-  !activate <group_name>, !a gs <group_name>
-                            Activate all servers in the specified group
-                            Example: !a gs home_cluster
-
-  !activate <group_name>:<server_number>, !a <server_number>
-                            Activate a specific server in the group
-                            Example: !a home_cluster:blade1
-
-  !exit, !e                 Exit the interactive shell
-
-  !?, ?, !help              Show this help message
+!e or !execute          - Execute a Linux command on active SSH servers and display the output in the shell.
+!ea or !execute-async   - Execute a Linux command asynchronously on active SSH servers and display the output in the shell.
+!h or !help [COMMAND]   - Get general help or specific help for a command.
+clear                   - Clear the terminal screen.
 ```
+How to Use the Shell:
+
+    Check Available Groups
+    To start, you may want to list all available server groups. Use the following command to see which groups are available:
+
+    diff
+
+!gs
+
+Display Servers in a Group
+If you want to see which servers belong to a specific group, use the command:
+
+diff
+
+!g group_name
+
+If you don’t specify a group, it will show servers in the currently active group:
+
+diff
+
+!g
+
+Activate Servers
+To activate all servers in a particular group, use the !a command followed by the group name:
+
+css
+
+!a group_name
+
+You can also activate multiple groups at once:
+
+css
+
+!a group1,group2
+
+Additionally, if you want to activate only a specific server (blade) within a group, use the format:
+
+css
+
+!a group_name:server_number
+
+Deactivate Servers
+Similarly, to deactivate servers in a group, use the !da command followed by the group name:
+
+diff
+
+!da group_name
+
+To deactivate multiple groups:
+
+diff
+
+!da group1,group2
+
+You can also deactivate a specific server within a group:
+
+diff
+
+!da group_name:server_number
+
+Check Status of Servers
+To check the status of active servers (whether SSH is running and if they are connected), use:
+
+diff
+
+!s
+
+Execute Commands on Active Servers
+To run a Linux command synchronously on all active servers and view the output in the shell:
+
+bash
+
+!e command
+
+For example:
+
+bash
+
+!e ls /var
+
+Run Commands Asynchronously
+If you need to run a long-running command asynchronously (in the background) on active servers, use:
+
+bash
+
+!ea command
+
+Exit the Shell
+When you're done, exit the interactive mode and disconnect from all active SSH sessions with:
+
+bash
+
+exit
+
+Get Help
+If you need general help or help with a specific command, use:
+
+diff
+
+    !h
+    !h command_name
+
+    Clear the Terminal Screen
+    To clear the terminal window:
+
+arduino
+
+clear
+
+Example Workflow:
+
+    Start by displaying available groups with !gs.
+    Activate multiple groups with !a group1,group2.
+    Check the status of all active servers with !s.
+    Run a Linux command across the active servers with !e ls /var.
+    Deactivate specific servers with !da group2.
+    Exit the interactive mode with exit.
+
+This shell allows you to easily manage server groups, run commands, and monitor server statuses in an intuitive way.
+
 ## Configuration
 
 ## Running Tests
