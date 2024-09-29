@@ -1,8 +1,26 @@
 # MultiSSH
-**MultiSSH** is a lightweight shell script tool designed to execute commands across multiple SSH servers simultaneously, making it ideal for managing server configurations or performing bulk operations with minimal dependencies
+**MultiSSH** is a lightweight, versatile shell script tool designed to execute commands across multiple SSH servers simultaneously. Whether you're managing server configurations or performing bulk operations, MultiSSH provides an efficient, minimalistic solution with minimal dependencies.
 
 ## Description
-MultiSSH is a simple yet powerful shell script created to streamline operations across entire lists of SSH servers. Its primary function is to allow users to execute a single command on multiple servers at once, making it an efficient tool for tasks like system administration, bulk server configuration, or automating maintenance routines. With minimal dependencies due to its shell script nature, MultiSSH is highly accessible and easy to integrate into existing workflows. This makes it particularly useful for DevOps teams, network administrators, or even automating tasks in environments with large server infrastructures.
+MultiSSH is a simple yet powerful shell script, crafted to streamline the management of multiple SSH servers. It allows users to execute commands on numerous servers at once, making it ideal for tasks such as system administration, server configuration, or automating large-scale maintenance routines.
+
+With its lightweight nature and lack of complex dependencies, MultiSSH integrates seamlessly into existing workflows, providing quick setup and usage. This makes it particularly useful for DevOps teams, network administrators, and anyone working in environments with extensive server infrastructures.
+
+Key features include the ability to activate/deactivate specific groups or individual servers, check server statuses, and execute commands both synchronously and asynchronously, offering users full control over their server operations.
+
+Key Benefits:
+
+    Execute commands across multiple servers in parallel.
+    Activate or deactivate entire groups of servers or individual servers.
+    Check the real-time status of SSH connections and server health.
+    Minimal dependencies, making it easy to deploy and use in any shell environment.
+    Ideal for large infrastructures, allowing bulk server operations and automation.
+
+Ideal Use Cases:
+
+    DevOps teams managing large server fleets.
+    System administrators handling configuration or routine maintenance tasks.
+    Automation scripts for server health checks, updates, or batch operations.
 
 ## Table of Contents
 - [Installation](#installation)
@@ -80,7 +98,7 @@ clear                   - Clear the terminal screen.
   ```
   Additionally, if you want to activate only a specific server (blade) within a group, use the format:
   ```bash
-  !a group_name:server_number
+  !a group_name:server_name
   ```
 
 - **Deactivate Servers**  
@@ -94,7 +112,7 @@ clear                   - Clear the terminal screen.
   ```
   You can also deactivate a specific server within a group:
   ```bash
-  !da group_name:server_number
+  !da group_name:server_name
   ```
 
 - **Check Status of Servers**  
