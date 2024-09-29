@@ -1,10 +1,11 @@
 #!/bin/bash
 
-function usage(){
-    echo "Usage: execute-async [OPTIONS] COMMAND"
-    echo "Execute a command asynchronously."
+function usage() {
+    echo "Usage: !execute-async COMMAND or !ea COMMAND"
+    echo "Execute a Linux command asynchronously on active SSH servers and display the output in the shell."
     echo ""
-    echo "Options:"
-    echo "  -h, --help    Show this help message and exit"
-    echo "  -t, --timeout Set a timeout for the command execution"
+    echo "Examples:"
+    echo "  !execute-async cd /var; ls -l"
+    echo "  !ea cd /var; ls -l"
+    echo "  !execute-async echo 'Hello, World!'"
 }

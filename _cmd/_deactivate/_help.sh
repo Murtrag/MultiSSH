@@ -1,10 +1,14 @@
 #!/bin/bash
 
-function usage(){
-    echo "Usage: deactivate [OPTIONS]"
-    echo "Deactivate the current environment or service."
+function usage() {
+    echo "Usage: !deactivate [RESOURCE] or !da [RESOURCE]"
+    echo "Deactivate the specified resources (group or server)."
     echo ""
-    echo "Options:"
-    echo "  -h, --help    Show this help message and exit"
-    echo "  -f, --force   Force deactivation without confirmation"
+    echo "Examples:"
+    echo "  !deactivate"
+    echo "  !da"
+    echo "  !deactivate group1"
+    echo "  !deactivate group1,group2"
+    echo "  !deactivate group1:server1"
 }
+

@@ -1,10 +1,12 @@
 #!/bin/bash
 
-function usage(){
-    echo "Usage: execute [OPTIONS] COMMAND"
-    echo "Execute a command synchronously."
+function usage() {
+    echo "Usage: !execute COMMAND or !e COMMAND"
+    echo "Execute a Linux command on active SSH servers and display the output in the shell."
     echo ""
-    echo "Options:"
-    echo "  -h, --help    Show this help message and exit"
-    echo "  -l, --log     Log the command output"
+    echo "Examples:"
+    echo "  !execute cd /var; ls -l"
+    echo "  !e cd /var; ls -l"
+    echo "  !execute echo 'Hello, World!'"
+    echo "  !e echo 'Hello, World!'"
 }

@@ -1,10 +1,12 @@
 #!/bin/bash
 
-function usage(){
-    echo "Usage: activate [OPTIONS]"
-    echo "Activate the specified environment or service."
+function usage() {
+    echo "Usage: !activate [RESOURCE] or !a [RESOURCE]"
+    echo "Activate the specified resources (group or a single serwer)."
     echo ""
-    echo "Options:"
-    echo "  -h, --help    Show this help message and exit"
-    echo "  -v, --verbose Enable verbose output"
+    echo "Examples:"
+    echo "  !a group1"
+    echo "  !activate group2"
+    echo "  !a group1,group2,group3"
+    echo "  !a group1:blade1"
 }

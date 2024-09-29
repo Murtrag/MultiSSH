@@ -1,11 +1,7 @@
 #!/bin/bash
 
-function usage(){
-    echo "Usage: status [OPTIONS]"
-    echo "Check the status of the system or service."
-    echo ""
-    echo "Options:"
-    echo "  -h, --help    Show this help message and exit"
-    echo "  -d, --detail  Show detailed status information"
-    exit 0
+function usage() {
+    echo "Usage: !s or !status"
+    echo "Display the status of the active group of servers."
+    echo "Checks if SSH is running on the machines and if the SSH session is connected."
 }
