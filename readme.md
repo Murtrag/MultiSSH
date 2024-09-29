@@ -2,25 +2,24 @@
 **MultiSSH** is a lightweight, versatile shell script tool designed to execute commands across multiple SSH servers simultaneously. Whether you're managing server configurations or performing bulk operations, MultiSSH provides an efficient, minimalistic solution with minimal dependencies.
 
 ## Description
-MultiSSH is a simple yet powerful shell script, crafted to streamline the management of multiple SSH servers. It allows users to execute commands on numerous servers at once, making it ideal for tasks such as system administration, server configuration, or automating large-scale maintenance routines.
+
+**MultiSSH** is a simple yet powerful shell script designed to streamline the management of multiple SSH servers. It allows users to execute commands on numerous servers simultaneously, making it ideal for tasks such as system administration, server configuration, or automating large-scale maintenance routines.
 
 With its lightweight nature and lack of complex dependencies, MultiSSH integrates seamlessly into existing workflows, providing quick setup and usage. This makes it particularly useful for DevOps teams, network administrators, and anyone working in environments with extensive server infrastructures.
 
-Key features include the ability to activate/deactivate specific groups or individual servers, check server statuses, and execute commands both synchronously and asynchronously, offering users full control over their server operations.
+### Key Features
 
-Key Benefits:
+- Execute commands across multiple servers in parallel.
+- Activate or deactivate entire groups of servers or individual servers.
+- Check the real-time status of SSH connections and server health.
+- Minimal dependencies, making it easy to deploy and use in any shell environment.
+- Ideal for large infrastructures, allowing bulk server operations and automation.
 
-    Execute commands across multiple servers in parallel.
-    Activate or deactivate entire groups of servers or individual servers.
-    Check the real-time status of SSH connections and server health.
-    Minimal dependencies, making it easy to deploy and use in any shell environment.
-    Ideal for large infrastructures, allowing bulk server operations and automation.
+### Ideal Use Cases
 
-Ideal Use Cases:
-
-    DevOps teams managing large server fleets.
-    System administrators handling configuration or routine maintenance tasks.
-    Automation scripts for server health checks, updates, or batch operations.
+- DevOps teams managing large server fleets.
+- System administrators handling configuration or routine maintenance tasks.
+- Automation scripts for server health checks, updates, or batch operations.
 
 ## Table of Contents
 - [Installation](#installation)
@@ -30,6 +29,7 @@ Ideal Use Cases:
 - [Contributing](#contributing)
 - [License](#license)
 - [Authors](#authors)
+- [Acknowledgements](#acknowledgements)
 
 ## Installation
 Comming soon
