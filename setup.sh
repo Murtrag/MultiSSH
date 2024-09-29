@@ -1,10 +1,12 @@
 #!/bin/bash
+readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+readonly TARGET_DIR="/home/$USER/MultiSSH"
 
-cd
-git clone https://github.com/Murtrag/MultiSSH.git
-cd MultiSSH
+# Copy the current directory (SCRIPT_DIR) to the target location
+cp -r "$SCRIPT_DIR" "$TARGET_DIR"
+cd "$TARGET_DIR"
 
-# Create symlink to main script
+# Create symlink to the main script (will fail if the symlink already exists)
 sudo ln -s $(pwd)/multiSSH.sh /usr/local/bin/multissh
 
 # Add execution permission to the main script
