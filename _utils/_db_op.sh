@@ -6,6 +6,8 @@ if [[ -z "${SCRIPT_DIR:-}" ]]; then
     readonly SCRIPT_DIR
 fi
 
+. "/home/$USER/.config/multissh/global.sh"
+
 declare -A db
 
 function parse_db(){
@@ -135,11 +137,11 @@ function execute_on_group(){
                 user=$(echo "${login_host}" | awk -F '@' '{print $1}')
                 ip=$(echo "${login_host}" | awk -F '@' '{print $2}')
             else
-                user="vagrant" # Default user 
+                user=$DEFAULT_USER
                 ip="$login_host"
             fi
             port=$(echo "${host_and_port}" | awk -F ':' '{print $2}')
-            port=${port:-22}
+            port=${port:-$DEFAULT_PORT}
             name=$(echo "$node" | awk -F '[()]' '{print $2}')
             $func "$ip" "$port" "$group" "$name" "$user"
     }

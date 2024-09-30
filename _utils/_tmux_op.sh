@@ -1,4 +1,13 @@
 #!/bin/bash
+function ssh_password(){
+    if [[ -z ${DEFAULT_PASSWORD} ]]
+    then
+        echo ""
+        exit 0
+    fi
+    echo "sshpass -p '$DEFAULT_PASSWORD' "
+    exit 0
+}
 
 function start_tmux_ssh_session(){
     # Stargs session tmux session
@@ -11,9 +20,9 @@ function start_tmux_ssh_session(){
     local name=$4
     local user=$5
     (tmux new-session -d -s "${group_name}-${name}" \
-    "ssh \
-    -i /home/vagrant/.ssh/my_vagrant_key \
-    -o StrictHostKeyChecking=no\
+    "$(ssh_password)ssh \
+    ${DEFAULT_IDENTITY} \
+    ${DEFAULT_EXTRA} \
      ${user}@${ip} \
     -p ${port}") &>/dev/null
 }
@@ -55,6 +64,13 @@ function execute_tmux_ssh_command(){
     tmux send-keys -t "${group_name}-${name}" "$command ;touch /tmp/$signal_done" C-m
 
 
+    (tmux new-session -d -s "${group_name}-${name}" \
+    "$(ssh_password)ssh \
+    ${DEFAULT_IDENTITY} \
+    ${DEFAULT_EXTRA} \
+     ${user}@${ip} \
+    -p ${port}") &>/dev/null
+    
     # Wait for signal done
     while true; do
         sleep 0.5s

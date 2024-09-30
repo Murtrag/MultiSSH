@@ -65,8 +65,8 @@ function my_interpreter(){
 function ctrl_c_handler(){
     if [[ -n "$current_pid" ]]; then
         echo "Ctrl+C detected. Killing process $current_pid..."
-        kill -SIGINT "$current_pid"  # Zabij zawieszony proces
-        wait "$current_pid"  # Upewnij się, że proces się zakończył
+        kill -SIGINT "$current_pid" 
+        wait "$current_pid"  
         current_pid=""
     else
         echo "No process to kill. Continuing..."
@@ -74,5 +74,8 @@ function ctrl_c_handler(){
         bash "$SCRIPT_DIR/_cmd/_exit/_main.sh" "exit" "$PPID"
     fi
 }
-# Uruchom skrypt przez rlwrap
+
+# Initially deactivate previous active resources
+bash "$SCRIPT_DIR/_cmd/_deactivate/_main.sh" "!da"
+# Run script
 my_interpreter
