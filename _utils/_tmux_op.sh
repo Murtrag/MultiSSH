@@ -15,7 +15,17 @@ function ssh_password(){
     return 0
 }
 
-function start_tmux_ssh_session(){
+function generate_ssh_command(){
+    # Generates the SSH command string
+    # input: <str:user> <str:ip> <str:port>
+    # output: <str:ssh_command>
+    # return: <int:0||1>
+    local user=$1
+    local ip=$2
+    local port=$3
+    echo "$(ssh_password)ssh ${DEFAULT_IDENTITY} ${DEFAULT_EXTRA} ${user}@${ip} -p ${port}"
+    return 0
+}
     # Starts session tmux session
     # input: <str:ip> <str:port> <str:group_name> <str:name> <str:user>
     # output: none
@@ -26,11 +36,7 @@ function start_tmux_ssh_session(){
     local name=$4
     local user=$5
     (tmux new-session -d -s "${group_name}-${name}" \
-    "$(ssh_password)ssh \
-    ${DEFAULT_IDENTITY} \
-    ${DEFAULT_EXTRA} \
-     ${user}@${ip} \
-    -p ${port}") &>/dev/null
+    "$(generate_ssh_command ${user} ${ip} ${port})") &>/dev/null
 
     # Check the output code
     sleep 0.1
@@ -77,20 +83,11 @@ function execute_tmux_ssh_command(){
     local before=$(tmux capture-pane -p -S '-' -J -t "${group_name}-${name}")
     tmux send-keys -t "${group_name}-${name}" "$command ;echo $? > /tmp/$signal_done" C-m
 
-    (tmux new-session -d -s "${group_name}-${name}" \
-    "$(ssh_password)ssh \
-    ${DEFAULT_IDENTITY} \
-    ${DEFAULT_EXTRA} \
-     ${user}@${ip} \
-    -p ${port}") &>/dev/null
 
     # Wait for signal done
     while true; do
         sleep 0.5s
-        if ssh -i /home/vagrant/.ssh/my_vagrant_key \
-            -o StrictHostKeyChecking=no \
-            ${user}@${ip} \
-            -p ${port} \
+        if $(generate_ssh_command ${user} ${ip} ${port}) \
             "[ -f /tmp/$signal_done ] && rm /tmp/$signal_done"; then
             # sleep 0.5s
             local after=$(tmux capture-pane -p -S '-' -J -t "${group_name}-${name}")
