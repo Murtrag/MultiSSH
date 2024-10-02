@@ -26,6 +26,8 @@ function generate_ssh_command(){
     echo "$(ssh_password)ssh ${DEFAULT_IDENTITY} ${DEFAULT_EXTRA} ${user}@${ip} -p ${port}"
     return 0
 }
+
+function start_tmux_ssh_session(){
     # Starts session tmux session
     # input: <str:ip> <str:port> <str:group_name> <str:name> <str:user>
     # output: none
@@ -74,7 +76,8 @@ function execute_tmux_ssh_command(){
     # Executes give command in existing tmux session
     # input: <str:group_name> <str:name> <str:command>
     # output: <str:tmux_command_output>
-    # return: <int:0||1>
+    # return: none 
+    # @TODO exit should return <int:0||1>
     local group_name=$1
     local name=$2
     local command=$3
@@ -83,13 +86,14 @@ function execute_tmux_ssh_command(){
     local before=$(tmux capture-pane -p -S '-' -J -t "${group_name}-${name}")
     tmux send-keys -t "${group_name}-${name}" "$command ;echo $? > /tmp/$signal_done" C-m
 
-
     # Wait for signal done
     while true; do
         sleep 0.5s
-        if $(generate_ssh_command ${user} ${ip} ${port}) \
-            "[ -f /tmp/$signal_done ] && rm /tmp/$signal_done"; then
-            # sleep 0.5s
+        ssh_cmd="$(generate_ssh_command ${user} ${ip} ${port})"
+        if eval "$ssh_cmd [ -f /tmp/$signal_done ]"
+        then
+            # exit_code=$(eval "$ssh_cmd cat /tmp/$signal_done")
+            eval "$ssh_cmd rm /tmp/$signal_done"
             local after=$(tmux capture-pane -p -S '-' -J -t "${group_name}-${name}")
             break
         else
@@ -97,5 +101,6 @@ function execute_tmux_ssh_command(){
         fi
     done
 
+    # echo "$exit_code"
     diff <(echo "$before") <(echo "$after") | grep ">" | grep -v "$signal_done" | sed 's/> /\t/g'
 }
