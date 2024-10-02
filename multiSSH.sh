@@ -83,7 +83,7 @@ fi
 # Check if user requested interactive mode
 if [[ "${RUN_INTERACTIVE}" = 'true' ]]
 then
-  rlwrap ./_interactive_shell.sh -f "${SERVER_LIST}"
+  rlwrap "${SCRIPT_DIR}/_interactive_shell.sh" -f "${SERVER_LIST}"
 fi
 
 # Expect the best, prepare for the worst.
