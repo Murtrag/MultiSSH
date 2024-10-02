@@ -12,4 +12,3 @@ DEFAULT_PORT="22"
 DEFAULT_EXTRA="-o StrictHostKeyChecking=no"
 
 # PREFIX= "sshpass -p 'YourGlobalPassword'"
-~                                                  
