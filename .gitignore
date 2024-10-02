@@ -1,3 +1,4 @@
 Vagrantfile
+_db/*
 .vagrant/
 .aider*
