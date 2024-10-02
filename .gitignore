@@ -1,4 +1,5 @@
 Vagrantfile
+expectations.txt
 _db/*
 .vagrant/
 .aider*
