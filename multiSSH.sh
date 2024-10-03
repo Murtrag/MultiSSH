@@ -22,7 +22,6 @@ usage() {
 }
 
 declare -A db
-
 parse_db $SERVER_LIST
 
 
