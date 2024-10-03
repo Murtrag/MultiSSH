@@ -57,19 +57,23 @@ fi
 # Anything that remains on the command line is to be treated as a single command.
 COMMAND="${*}"
 
-# Make sure the SERVER_LIST file exists.
-if [[ ! -e "${SERVER_LIST}" ]]
+# Update the server list if a file is provided
+if [[ -n "${SERVER_LIST}" ]]
 then
-  echo "Cannot open server list file ${SERVER_LIST}." >&2
-  exit 1
+  update_db "${SERVER_LIST}" "${SERVER_LIST}"
 fi
 
 # Check if user requested interactive mode
 if [[ "${RUN_INTERACTIVE}" = 'true' ]]
 then
-  update_db "${SERVER_LIST}" "${SERVER_LIST}"
   rlwrap "${SCRIPT_DIR}/_interactive_shell.sh" -f "${SERVER_LIST}"
   exit 0
+fi
+
+# If no command is provided, show usage
+if [[ -z "${COMMAND}" ]]
+then
+  usage
 fi
 
 # Expect the best, prepare for the worst.
