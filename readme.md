@@ -254,9 +254,9 @@ The format of the file must follow these rules:
 
 ```
 #HomeServers
-127.0.5.1 (blade1)
-127.0.5.2 (blade2)
-127.0.5.3 (blade3)
+root@127.0.5.1:222 (blade1)
+127.0.5.2:223 (blade2)
+testUser@127.0.5.3 (blade3)
 
 #WorkServers
 127.0.6.1 (blade1)
