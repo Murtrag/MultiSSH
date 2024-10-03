@@ -290,12 +290,9 @@ You can also specify a particular group of tests to run by providing the group n
 ./test.sh <group>
 ```
 This flexibility allows for running specific test cases or groups of tests when needed.
-## Contributing
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details.
 
 ## Authors
 - Lukasz Czernik - [lukasz.czernik@gmail.com](mailto:lukasz.czernik@gmail.com)
-
-## Acknowledgements
