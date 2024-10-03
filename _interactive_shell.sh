@@ -6,7 +6,7 @@ source "${SCRIPT_DIR}/_utils/_db_op.sh"
 # source "${SCRIPT_DIR}/_cmd/_fasade.sh"
 
 declare -A db
-parse_db "_db"
+parse_db "${SCRIPT_DIR}/_db"
 
 SERVER_LIST=$2
 
