@@ -47,3 +47,7 @@ mv "$(pwd)/global.sh" "$GLOBAL_CONFIG_DIR/global.sh"
 
 # Add execution permission to the main script
 chmod +x $(pwd)/multiSSH.sh
+
+# Create directory for temporary files
+mkdir -p "/tmp/multissh"
+touch "/tmp/multissh/active_resources.tmp"

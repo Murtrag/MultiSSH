@@ -11,20 +11,20 @@ parse_db "${SCRIPT_DIR}/_db"
 SERVER_LIST=$2
 
 function prompt(){
-    local resources=$(cat "${SCRIPT_DIR}/_db/.current_resource" | xargs)
+    local active_resources=$(cat "/tmp/multissh/active_resources.tmp" | xargs)
     # Check if any activated && build prompt
-    if [[ "${resources}" != "" ]]
+    if [[ "${active_resources}" != "" ]]
     then
-        resources="(${resources}) "
+        active_resources="(${active_resources}) "
 
     fi
     # Display user prompt
-    echo -ne "\033[0;34m${resources}\033[0m\033[1;33mcmd>\033[0m "
+    echo -ne "\033[0;34m${active_resources}\033[0m\033[1;33mcmd>\033[0m "
     read USER_COMMAND
     tput cuu1
     # echo -ne "\033[K"
     tput el
-    echo -e "\033[0;34m${resources}\033[0m\033[1;33mcmd>\033[0m ${USER_COMMAND}"
+    echo -e "\033[0;34m${active_resources}\033[0m\033[1;33mcmd>\033[0m ${USER_COMMAND}"
 }
 
 function usage(){

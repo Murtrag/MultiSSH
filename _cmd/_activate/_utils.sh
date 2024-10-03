@@ -11,10 +11,10 @@ function activate(){
 
     start_tmux_ssh_session "$@"
 
-    resource_duplicates=$(grep -F "$resource" "$current_resource")
+    resource_duplicates=$(grep -F "$resource" "$active_resources_path")
     if [[ -z "${resource_duplicates}" ]]
     then
-        # GROUP BLOCK
-        echo $resource >> $current_resource
+        # Add to activated
+        echo $resource >> $active_resources_path
     fi
 }

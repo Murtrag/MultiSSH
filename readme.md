@@ -58,6 +58,7 @@ To install **MultiSSH**, follow these steps:
    - Copy the repository to `/home/$USER/MultiSSH`.
    - Create a symlink for the `multiSSH.sh` script in `/usr/local/bin/`, allowing you to use the command `multissh` from anywhere.
    - Add execution permissions to the `multiSSH.sh` script.
+   - Create a temporary file at /tmp/multissh/current_resource.tmp to store currently active resources.
 
 **Distro packages:** Coming soon.
 

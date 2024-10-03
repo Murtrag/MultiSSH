@@ -6,7 +6,8 @@ readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 . "${SCRIPT_DIR}/_utils.sh"
 . "${SCRIPT_DIR}/../../_utils/_beautiful_table.sh"
 
-readonly current_resource="$(cat ${SCRIPT_DIR}/../../_db/.current_resource)"
+readonly active_resources="$(cat /tmp/multissh/active_resources.tmp)"
+
 readonly COMMAND=$1 
 
 
@@ -29,10 +30,10 @@ then
         execute_on_group $args check_status
         print_table '|' "${table_value}"
         exit 0
-    elif [[ "${current_resource}" != "" ]]
+    elif [[ "${active_resources}" != "" ]]
     then
-        current_resource2=$(echo "${current_resource}" | tr '\n' ',')
-        execute_on_group "$current_resource2" check_status
+        formated_active_resources=$(echo "${active_resources}" | tr '\n' ',')
+        execute_on_group "$formated_active_resources" check_status
         print_table '|' "${table_value}"
         exit 0
 

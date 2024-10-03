@@ -111,7 +111,7 @@ test_activate(){
     # !a group1
     expected_output="group1"
     bash "${SCRIPT_DIR}/../_cmd/_activate/_main.sh" "!a group1" 2>/dev/null
-    command_output=$(grep "${expected_output}" ${SCRIPT_DIR}/../_db/.current_resource) 
+    command_output=$(grep "${expected_output}" /tmp/multissh/active_resources.tmp) 
     assertEquals "Test activate one group (!a group1):\n" "${expected_output}" "${command_output}"
     bash "${SCRIPT_DIR}/../_cmd/_deactivate/_main.sh" "!da"
 
@@ -119,7 +119,7 @@ test_activate(){
     # !a group1:blade1
     expected_output="group1:blade1"
     bash "${SCRIPT_DIR}/../_cmd/_activate/_main.sh" "!a group1:blade1" 2>/dev/null
-    command_output=$(grep "${expected_output}" ${SCRIPT_DIR}/../_db/.current_resource) 
+    command_output=$(grep "${expected_output}" /tmp/multissh/active_resources.tmp) 
     assertEquals "Test activate one node (!a group1:blade1):\n" "${expected_output}" "${command_output}"
     bash "${SCRIPT_DIR}/../_cmd/_deactivate/_main.sh" "!da"
 
@@ -129,7 +129,7 @@ test_activate(){
 group2
 group1:blade2"
     bash "${SCRIPT_DIR}/../_cmd/_activate/_main.sh" "!a group1:blade1,group2,group1:blade2"
-    command_output=$(cat ${SCRIPT_DIR}/../_db/.current_resource) 
+    command_output=$(cat /tmp/multissh/active_resources.tmp) 
     # diff <(echo "$expected_output") <(echo "$command_output")
 
     assertEquals "Test activate group and blades(!a group1:blade1,group2,group1:blade2):\n" "${expected_output}" "${command_output}"
@@ -139,7 +139,7 @@ group1:blade2"
 
     expected_output=""
     bash "${SCRIPT_DIR}/../_cmd/_activate/_main.sh" "!a xyz1:a1,xyy1,xyx:b2"
-    command_output=$(cat ${SCRIPT_DIR}/../_db/.current_resource) 
+    command_output=$(cat /tmp/multissh/active_resources.tmp) 
     assertEquals "Test activate unexisting resources(!a xyz1:a1,xyy1,xyx:b2):" "${expected_output}" "${command_output}"
     bash "${SCRIPT_DIR}/../_cmd/_deactivate/_main.sh" "!da"
 }
@@ -150,7 +150,7 @@ test_deactivate(){
     bash "${SCRIPT_DIR}/../_cmd/_activate/_main.sh" "!a group1,group2" &>/dev/null
     bash "${SCRIPT_DIR}/../_cmd/_deactivate/_main.sh" "!da"
     expected_result=""
-    actual_result=$(cat ${SCRIPT_DIR}/../_db/.current_resource) 
+    actual_result=$(cat /tmp/multissh/active_resources.tmp) 
     assertEquals "Test deactivate all(!da):\n" "${expected_output}" "${command_output}"
 
     # Test group deactivation
@@ -158,7 +158,7 @@ test_deactivate(){
     bash "${SCRIPT_DIR}/../_cmd/_activate/_main.sh" "!a group1,group2" &>/dev/null
     bash "${SCRIPT_DIR}/../_cmd/_deactivate/_main.sh" "!da group2"
     expected_result="group1"
-    actual_result=$(cat  ${SCRIPT_DIR}/../_db/.current_resource) 
+    actual_result=$(cat /tmp/multissh/active_resources.tmp) 
     assertEquals "Test deactivate group(!da group2):\n" "${expected_output}" "${command_output}"
 
     # Test blade deactivation
@@ -166,7 +166,7 @@ test_deactivate(){
     bash "${SCRIPT_DIR}/../_cmd/_activate/_main.sh" "!a group1,group2:blade1" &>/dev/null
     bash "${SCRIPT_DIR}/../_cmd/_deactivate/_main.sh" "!da group2:blade1"
     expected_result="group1"
-    actual_result=$(cat  ${SCRIPT_DIR}/../_db/.current_resource) 
+    actual_result=$(cat /tmp/multissh/active_resources.tmp) 
     assertEquals "Test deactivate group(!da group2:blade1):\n" "${expected_output}" "${command_output}"
 
     # Test list of  resources deactivation
@@ -174,7 +174,7 @@ test_deactivate(){
     bash "${SCRIPT_DIR}/../_cmd/_activate/_main.sh" "!a group1,group2:blade1" &>/dev/null
     bash "${SCRIPT_DIR}/../_cmd/_deactivate/_main.sh" "!da group1,group2"
     expected_result=""
-    actual_result=$(cat  ${SCRIPT_DIR}/../_db/.current_resource) 
+    actual_result=$(cat /tmp/multissh/active_resources.tmp) 
     assertEquals "Test deactivate group(!da group1,group2):\n" "${expected_output}" "${command_output}"
 
     # Test bad resource deactivation
@@ -182,7 +182,7 @@ test_deactivate(){
     bash "${SCRIPT_DIR}/../_cmd/_deactivate/_main.sh" "!da xyz,zzz,bbb:a1"
     expected_result="group1
     group2:blade1"
-    actual_result=$(cat  ${SCRIPT_DIR}/../_db/.current_resource) 
+    actual_result=$(cat /tmp/multissh/active_resources.tmp) 
     assertEquals "Test deactivate group(!da group1,group2):\n" "${expected_output}" "${command_output}"
 }
 

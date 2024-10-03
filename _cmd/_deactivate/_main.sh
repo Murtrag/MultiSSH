@@ -1,7 +1,8 @@
 #!/bin/bash
 
 readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
-readonly current_resource="$(cat ${SCRIPT_DIR}/../../_db/.current_resource)"
+readonly active_resources_path="/tmp/multissh/active_resources.tmp"
+active_resources="$(cat "$active_resources_path")"
 
 . "${SCRIPT_DIR}/../../_utils/_db_op.sh"
 . "${SCRIPT_DIR}/_help.sh"
@@ -22,20 +23,20 @@ then
     fi
 
 
-    if [[ "${current_resource}" != "" && $args != "" ]] 
+    if [[ "${active_resources}" != "" && $args != "" ]] 
     then
         IFS=","
         for resource in $args
         do
-            sed -i "/^${resource}.*$/d" "${SCRIPT_DIR}/../../_db/.current_resource"
+            sed -i "/^${resource}.*$/d" "${active_resources_path}"
             execute_on_group $resource close_session
         done
         unset IFS
         exit 0
-    elif [[ "${current_resource}" != "" ]]
+    elif [[ "${active_resources}" != "" ]]
     then
-        rm "${SCRIPT_DIR}/../../_db/.current_resource"
-        touch "${SCRIPT_DIR}/../../_db/.current_resource"
+        rm "${active_resources_path}"
+        touch "${active_resources_path}"
         (tmux ls | awk -F: '{print $1}' | xargs -I {} tmux kill-session -t {}) &>/dev/null
         echo "Deactivating resource ${args:-All}"
         exit 0

@@ -7,7 +7,8 @@ readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
 
 readonly COMMAND=$1 
-readonly current_resource="${SCRIPT_DIR}/../../_db/.current_resource"
+readonly active_resources_path="/tmp/multissh/active_resources.tmp"
+
 
 
 
