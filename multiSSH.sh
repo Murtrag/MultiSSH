@@ -4,7 +4,7 @@ readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 . "$SCRIPT_DIR/_utils/_db_op.sh"
 
 # A list of servers, one per line.
-SERVER_LIST="${SCRIPT_DIR}/_db"
+SERVER_LIST="${SCRIPT_DIR}/test_db.txt"
 
 # Options for the ssh command.
 SSH_OPTIONS='-o ConnectTimeout=2'
@@ -55,7 +55,7 @@ then
 fi
 
 # Anything that remains on the command line is to be treated as a single command.
-COMMAND="${@}"
+COMMAND="${*}"
 
 # Make sure the SERVER_LIST file exists.
 if [[ ! -e "${SERVER_LIST}" ]]
@@ -67,14 +67,16 @@ fi
 # Check if user requested interactive mode
 if [[ "${RUN_INTERACTIVE}" = 'true' ]]
 then
+  update_db "${SERVER_LIST}" "${SERVER_LIST}"
   rlwrap "${SCRIPT_DIR}/_interactive_shell.sh" -f "${SERVER_LIST}"
+  exit 0
 fi
 
 # Expect the best, prepare for the worst.
 EXIT_STATUS='0'
 
 # Loop through the SERVER_LIST
-for SERVER in $(cat ${SERVER_LIST})
+for SERVER in $(cat "${SERVER_LIST}")
 do
   if [[ "${VERBOSE}" = 'true' ]]
   then
@@ -88,7 +90,7 @@ do
   then
     echo "DRY RUN: ${SSH_COMMAND}"
   else
-    ${SSH_COMMAND}
+    eval "${SSH_COMMAND}"
     SSH_EXIT_STATUS="${?}"
 
     # Capture any non-zero exit status from the SSH_COMMAND and report to the user.
