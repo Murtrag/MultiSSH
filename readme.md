@@ -54,7 +54,8 @@ To install **MultiSSH**, follow these steps:
    ```
 
    This script will:
-   - Copy the repository to `/home/$USER/MultiSSH`
+   - Install the dependencies: rlwrap, tmux, and sshpass.
+   - Copy the repository to `/home/$USER/MultiSSH`.
    - Create a symlink for the `multiSSH.sh` script in `/usr/local/bin/`, allowing you to use the command `multissh` from anywhere.
    - Add execution permissions to the `multiSSH.sh` script.
 
