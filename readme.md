@@ -196,6 +196,77 @@ clear                   - Clear the terminal screen.
 This shell allows you to easily manage server groups, run commands, and monitor server statuses in an intuitive way.
 
 ## Configuration
+Global Settings
+
+The configuration for the multissh script can be adjusted in the file located at /home/$USER/multissh/global.sh. 
+`nano /home/$USER/multissh/global.sh`
+This file contains global settings for SSH connections, such as default user, password, port, and identity file.
+
+Example configuration in global.sh:
+
+
+# SSH Auth config
+
+DEFAULT_USER="vagrant"
+
+# To use default password, the package sshpass is required
+# DEFAULT_PASSWORD="password123"
+
+DEFAULT_PORT="22"
+
+# DEFAULT_IDENTITY="-i /home/vagrant/.ssh/my_vagrant_key"
+
+DEFAULT_EXTRA="-o StrictHostKeyChecking=no"
+
+    DEFAULT_USER: The default SSH user to be used if not specified for a particular server.
+    DEFAULT_PASSWORD: The default SSH password (if sshpass is installed) for servers that don't require an SSH key.
+    DEFAULT_PORT: The default SSH port if no specific port is provided.
+    DEFAULT_IDENTITY: The path to the SSH private key file to be used for authentication.
+    DEFAULT_EXTRA: Additional SSH options, such as disabling strict host key checking.
+
+These global variables set default values for SSH connections, and they will be used unless specific details are provided in the imported data.
+Importing Server Groups and Servers
+
+You can import a list of server groups and their respective servers using the multissh command with the -f option, like this:
+
+
+multissh -f /path/to/file.txt
+
+Format of the File:
+
+The format of the file must follow these rules:
+
+    Group Name: Defined by a line starting with #, e.g., #test1.
+    Server Details: For each group, you can specify servers under the group name. Each server entry should contain:
+        IP address (required)
+        Server name (required, enclosed in parentheses)
+        User (optional, will default to DEFAULT_USER if not specified)
+        Port (optional, will default to DEFAULT_PORT if not specified)
+
+Example file format:
+
+#test1
+127.0.5.1 (blade1)
+127.0.5.2 (blade2)
+127.0.5.3 (blade3)
+
+#test2
+127.0.6.1 (blade1)
+127.0.6.2 (blade2)
+127.0.6.3 (blade3)
+
+Each entry can optionally specify the user and port, for example:
+
+
+
+user@127.0.5.1:2222 (blade1)
+
+In this case:
+
+    User: Overrides the default user for this specific server.
+    Port: Overrides the default port for this specific server.
+
+If no user or port is provided, the global defaults from global.sh will be used.
 
 ## Running Tests
 For testing, the project uses **shunit2** as the testing framework.
