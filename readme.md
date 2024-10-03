@@ -243,7 +243,7 @@ multissh -f /path/to/file.txt
 
 The format of the file must follow these rules:
 
-- **Group Name**: Defined by a line starting with `#`, e.g., `#test1`.
+- **Group Name**: Defined by a line starting with `#`, e.g., `#HomeServers`.
 - **Server Details**: For each group, you can specify servers under the group name. Each server entry should contain:
   - IP address (required)
   - Server name (required, enclosed in parentheses)
@@ -253,12 +253,12 @@ The format of the file must follow these rules:
 **Example file format:**
 
 ```
-#test1
+#HomeServers
 127.0.5.1 (blade1)
 127.0.5.2 (blade2)
 127.0.5.3 (blade3)
 
-#test2
+#WorkServers
 127.0.6.1 (blade1)
 127.0.6.2 (blade2)
 127.0.6.3 (blade3)

@@ -10,5 +10,3 @@ DEFAULT_PORT="22"
 # DEFAULT_IDENTITY="-i /home/vagrant/.ssh/my_vagrant_key"
 
 DEFAULT_EXTRA="-o StrictHostKeyChecking=no"
-
-# PREFIX= "sshpass -p 'YourGlobalPassword'"
