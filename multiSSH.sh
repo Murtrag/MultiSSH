@@ -1,4 +1,5 @@
 #!/bin/bash
+
 readonly SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 . "$SCRIPT_DIR/_utils/_db_op.sh"
 
@@ -22,22 +23,6 @@ usage() {
 
 declare -A db
 
-# function parse_db(){
-#   echo "start"
-#   db_dir="_db"
-#   for file in "${db_dir}"/*.list;
-#   do
-#     filename=$(basename "$file" .list)
-#     content=$(<"$file")
-#     db["$filename"]="$content"
-#   done 
-#     for key in "${!db[@]}"; do
-#     echo "Key: $key"
-#     echo "Content:"
-#     echo "${db[$key]}"
-#     echo "-------------------"
-#   done
-# }
 parse_db $SERVER_LIST
 
 
