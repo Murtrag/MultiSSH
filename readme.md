@@ -10,17 +10,17 @@ Key features include the ability to activate/deactivate specific groups or indiv
 
 Key Benefits:
 
-    Execute commands across multiple servers in parallel.
-    Activate or deactivate entire groups of servers or individual servers.
-    Check the real-time status of SSH connections and server health.
-    Minimal dependencies, making it easy to deploy and use in any shell environment.
-    Ideal for large infrastructures, allowing bulk server operations and automation.
+* Execute commands across multiple servers in parallel.
+* Activate or deactivate entire groups of servers or individual servers.
+* Check the real-time status of SSH connections and server health.
+* Minimal dependencies, making it easy to deploy and use in any shell environment.
+* Ideal for large infrastructures, allowing bulk server operations and automation.
 
 Ideal Use Cases:
 
-    DevOps teams managing large server fleets.
-    System administrators handling configuration or routine maintenance tasks.
-    Automation scripts for server health checks, updates, or batch operations.
+* DevOps teams managing large server fleets.
+* System administrators handling configuration or routine maintenance tasks.
+* Automation scripts for server health checks, updates, or batch operations.
 
 ## Table of Contents
 - [Installation](#installation)
